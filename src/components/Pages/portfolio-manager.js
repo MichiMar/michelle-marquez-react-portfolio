@@ -1,5 +1,6 @@
 import React, { Component } from "react";
 import axios from "axios";
+
 import PortfolioSideBarList from "../portfolio/portfolio-sidebar";
 import PortfolioForm from "../portfolio/portfolio-form";
 
@@ -14,21 +15,47 @@ export default class PortfolioManager extends Component {
       this
     );
     this.handleFormSubmissionError = this.handleFormSubmissionError.bind(this);
+    this.handleDeleteClick = this.handleDeleteClick.bind(this);
   }
 
   handleSuccessfulFormSubmission(portfolioItem) {
-    //
+    this.setState({
+      portfolioItems: [portfolioItem].concat(this.state.portfolioItems)
+    });
+  }
+
+  handleDeleteClick(portfolioItem) {
+    axios
+      .delete(
+        `https://michellemarquez.devcamp.space/portfolio/portfolio_items/${portfolioItem.id}`,
+        {
+          withCredentials: true
+        }
+      )
+      .then(response => {
+        this.setState({
+          portfolioItems: this.state.portfolioItems.filter(item => {
+            return item.id !== portfolioItem.id;
+          })
+        });
+      })
+      .catch(error => {
+        console.log("error", error);
+      });
   }
 
   handleFormSubmissionError(error) {
-    //
+    console.log("handleFormSubmissionError error", error);
   }
 
   getPortfolioItems() {
     axios
-      .get("https://michellemarquez.devcamp.space/portfolio/portfolio_items", {
-        withCredentials: true
-      })
+      .get(
+        "https://michellemarquez.devcamp.space/portfolio/portfolio_items?order_by=created_at&direction=desc",
+        {
+          withCredentials: true
+        }
+      )
       .then(response => {
         this.setState({
           portfolioItems: [...response.data.portfolio_items]
@@ -53,7 +80,10 @@ export default class PortfolioManager extends Component {
         </div>
 
         <div className="right-column">
-          <PortfolioSideBarList data={this.state.portfolioItems} />
+          <PortfolioSideBarList
+            handleDeleteClick={this.handleDeleteClick}
+            data={this.state.portfolioItems}
+          />
         </div>
       </div>
     );
