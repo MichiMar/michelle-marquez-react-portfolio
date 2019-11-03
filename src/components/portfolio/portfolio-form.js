@@ -44,7 +44,7 @@ export default class PortfolioForm extends Component {
         { withCredentials: true }
       )
       .then(response => {
-        this.state({
+        this.setState({
           [`${imageType}_url`]: ""
         });
       })
@@ -158,7 +158,11 @@ export default class PortfolioForm extends Component {
       withCredentials: true
     })
       .then(response => {
-        this.props.handleSuccessfulFormSubmission(response.data.portfolio_item);
+        if (this.state.editMode) {
+          this.props.handleEditFormSubmission();
+        } else {
+          this.props.handleNewFormSubmission(response.data.portfolio_item);
+        }
 
         this.setState({
           name: "",
@@ -170,7 +174,7 @@ export default class PortfolioForm extends Component {
           banner_image: "",
           logo: "",
           editMode: false,
-          apiUrl: `https://michellemarquez.devcamp.space/portfolio/portfolio_items/${id}`,
+          apiUrl: `https://michellemarquez.devcamp.space/portfolio/portfolio_items`,
           apiAction: "patch"
         });
 
@@ -308,5 +312,3 @@ export default class PortfolioForm extends Component {
     );
   }
 }
-
-// apiUrl: "https://michellemarquez.devcamp.space/portfolio/portfolio_items",
