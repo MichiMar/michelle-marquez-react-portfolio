@@ -93,7 +93,7 @@ export default class App extends Component {
     return (
       <div className="container">
         {/* date format in the top */}
-        <div>{moment().format("MMMM Do YY")}</div>
+        <div className="date-moment">{moment().format("MMMM Do YY")}</div>
 
         <Router>
           <div>
