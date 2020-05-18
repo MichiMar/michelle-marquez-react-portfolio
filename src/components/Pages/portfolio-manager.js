@@ -6,11 +6,12 @@ import PortfolioForm from "../portfolio/portfolio-form";
 
 export default class PortfolioManager extends Component {
   constructor() {
+    // @ts-ignore
     super();
 
     this.state = {
       portfolioItems: [],
-      portfolioToEdit: {}
+      portfolioToEdit: {},
     };
 
     this.handleNewFormSubmission = this.handleNewFormSubmission.bind(this);
@@ -23,13 +24,13 @@ export default class PortfolioManager extends Component {
 
   clearPortfolioToEdit() {
     this.setState({
-      portfolioToEdit: {}
+      portfolioToEdit: {},
     });
   }
 
   handleEditClick(portfolioItem) {
     this.setState({
-      portfolioToEdit: portfolioItem
+      portfolioToEdit: portfolioItem,
     });
   }
 
@@ -39,16 +40,16 @@ export default class PortfolioManager extends Component {
         `https://api.devcamp.space/portfolio/portfolio_items/${portfolioItem.id}`,
         { withCredentials: true }
       )
-      .then(response => {
+      .then((response) => {
         this.setState({
-          portfolioItems: this.state.portfolioItems.filter(item => {
+          portfolioItems: this.state.portfolioItems.filter((item) => {
             return item.id !== portfolioItem.id;
-          })
+          }),
         });
 
         return response.data;
       })
-      .catch(error => {
+      .catch((error) => {
         console.log("handleDeleteClick error", error);
       });
   }
@@ -59,7 +60,7 @@ export default class PortfolioManager extends Component {
 
   handleNewFormSubmission(portfolioItem) {
     this.setState({
-      portfolioItems: [portfolioItem].concat(this.state.portfolioItems)
+      portfolioItems: [portfolioItem].concat(this.state.portfolioItems),
     });
   }
 
@@ -72,15 +73,15 @@ export default class PortfolioManager extends Component {
       .get(
         "https://michellemarquez.devcamp.space/portfolio/portfolio_items?order_by=created_at&direction=desc",
         {
-          withCredentials: true
+          withCredentials: true,
         }
       )
-      .then(response => {
+      .then((response) => {
         this.setState({
-          portfolioItems: [...response.data.portfolio_items]
+          portfolioItems: [...response.data.portfolio_items],
         });
       })
-      .catch(error => {
+      .catch((error) => {
         console.log("error in getPortfolioItems", error);
       });
   }
